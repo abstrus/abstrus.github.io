@@ -1,4 +1,7 @@
-abstrus.github.io
-=================
+My coding blog
+==============
 
-Website !
+Credits
+-------
+
+See [the credits file](CREDITS.md).

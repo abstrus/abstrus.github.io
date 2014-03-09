@@ -1,0 +1,15 @@
+title:        abstrus codes
+url:          http://abstrus.github.io
+author:       Charles Bouchard-Légaré
+
+meta:
+    cblegare:
+        name:     Charles Bouchard-Légaré
+        github:   abstrus
+
+source:       ./_source
+destination:  ./_site
+markdown:     redcarpet
+pygments:     true
+permalink:    /:categories/:title.html
+future:       false

@@ -1,0 +1,100 @@
+// 
+// Custom styles
+//
+
+html {
+  height: 100%;
+}
+
+li {
+  list-style-position: inside;
+}
+
+p {
+  text-align: justify;
+  code {
+    font-weight:  normal;
+    color:        #585858;
+  }
+}
+
+pre {
+  margin-bottom:  1em;
+  padding-bottom: 0em; 
+  background-color: #000;
+  code {
+    
+  }
+}
+
+.post-list {
+  font-family: $header-font-family;
+}
+
+.anchor-link {
+  color:      #DDD;
+  font-size:  80%;
+  padding:    0em 0em 0em 0.5em;
+}
+
+time {
+  font-family: $header-font-family;
+  color:      #BBB;
+}
+
+#copy-notice {
+  p {
+    color:      #999;
+    text-align: center;
+    font-family: $header-font-family;
+  }
+}
+
+nav {
+  margin:         1em 1em 1em 1em;
+  #site-name {
+    margin:   0em 0em 0em 0em;
+    a{
+      color:    #AAA;
+    }
+  }
+  #linked-pages {
+    ul {
+      display:    block;
+      float:      right;
+      margin:     1em 1em 1.5em 1em;
+      text-align: right;
+      padding:    0em 0em 1em 0em;
+      
+      li {
+        display:  inline;
+        margin:   0.5em;
+        a {
+          font-family: $header-font-family;
+          color:    #bbb;
+          text-shadow: #333 1px 0 2px;
+          img {
+            height:               1.5em;
+            width:                1.5em;
+          }
+        }
+      }
+    }
+  }
+}
+
+body {
+  background-image:       url(../images/dark_mosaic.png);
+  min-height:             100%;
+  #page-content {
+    padding:     0em 0em 0em 0em;
+    #wrapper {
+      position:           relative;
+      padding:            2em 1em 1em 1em;
+      border-radius:      0.25em;
+      box-shadow:         .1em .2em .2em .2em #000;
+      top:                -50px;
+      background-color:   #ffffff;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+/* TEAM */
+  Author: Charles Bouchard-Légaré
+
+/* THANKS */
+  Textures: http://subtlepatterns.com/
+
+  Basic code: https://github.com/rememberlenny/Jekyll-Foundation-SASS
+  
+/* SITE */
+  Language: English
+  Components: jQuery, Foundation,
+  Software: Git, Jekyll, Compass
+  

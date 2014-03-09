@@ -1,0 +1,55 @@
+<!--
+<nav class="top-bar border-radius">
+<nav>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="#">{{ site.title }}</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon">
+      <a href="#"><span></span></a>
+    </li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+    </ul>
+    <ul class="right">
+      <li>
+        <a href="{{ site.url }}index.html">Home</a>
+      </li>
+      <li>
+        <a href="{{ site.url }}about.html">About</a>
+      </li>
+      <li>
+        <a  href="http://github.com/{{ site.meta.cblegare.github }}">
+          <img src="{{ site.url }}/assets/images/github-mark-light.png"/>
+        </a>
+      </li>
+    </ul>
+  </section>
+</nav>
+-->
+<nav>
+  <div class="row">
+    <div class="large-6 columns">
+      <h1 id="site-name">
+        <a href="#">{{ site.title }}</a>
+      </h1>
+    </div>
+    <div id="linked-pages" class="large-6 columns">
+      <ul>
+        <li>
+          <a href="{{ site.url }}index.html">Home</a>
+        </li>
+        <li>
+          <a href="{{ site.url }}about.html">About</a>
+        </li>
+        <li>
+          <a  href="http://github.com/{{ site.meta.cblegare.github }}">
+            <img src="{{ site.url }}/assets/images/github-mark-light.png"/>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

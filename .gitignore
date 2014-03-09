@@ -1,0 +1,6 @@
+_site
+.directory
+.kateproject
+.kateproject.d/
+.sass-cache/
+Gemfile.lock

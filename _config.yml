@@ -7,7 +7,7 @@ meta:
         name:     Charles Bouchard-Légaré
         github:   abstrus
 
-source:       ./_source
+source:       .
 destination:  ./_site
 markdown:     redcarpet
 pygments:     true

@@ -4,8 +4,8 @@ title:  Curing Domain Model Anemia - Part 2
 ---
 
 In the quest for a rich domain model, we are struggling to have entities injected with services.
-In the previous post on the subject, we defined what we thought would be nice to have and ran
-into some trouble with the persistence layer.  This time, we'll address one of those issues :
+In the previous post, we defined what we thought would be nice to have and ran
+into some troubles with the persistence layer.  This time, we'll address one of those issues :
 injecting dependencies into our entity repositories.
 
 I keep code samples [available on github](https://github.com/abstrus/AbstrusRichModelBundle). 
@@ -22,7 +22,7 @@ On the other hand, we may want to retrieve the repository using the entity manag
 compatibility reasons.  The solution provided above by Sluiman is not well suited for a this.  We'll
 try to address this.
 
-Let's say we want to use our newly rich domain object in the usual fashion as shown in most
+Let's say we want to fetch our newly rich domain object in the usual fashion shown in most
 documentations.
 
 {% highlight php startinline %}
@@ -36,17 +36,21 @@ public function showAction($companyId)
 }
 {% endhighlight %}
 
-That `getRepository` method is provided by the entity manager.  The solution will be different 
-whether the version of Doctrine ORM we use is older than 2.4 or not.  If it is, I would suggest to 
-update.  If it is not possible, you will have to use a custom `EntityManager` and reimplement the 
-`getRepository` so it use some factory to provide repositories.  Else, Doctrine added that feature 
-for us as stated in the 
+That `getRepository` method is provided by the entity manager.  If the `Company::__construct` method 
+takes something more than an entity manager as parameters, that call will throw an exception.  The
+issue is that we *do* need to have more than one parameter in the constructor because we can't trust
+optional dependencies injected via setters.
+
+The solution will be different whether the version of Doctrine ORM we use is older than 2.4 or not.  
+If it is, I would suggest to update.  If it is not possible, you will have to use a custom 
+`EntityManager` and reimplement the `getRepository` method so it uses some custom factory to provide 
+repositories.  Else, Doctrine added that feature for us as stated in the 
 [2.4 release blog post](http://www.doctrine-project.org/2013/09/11/doctrine-2-4-released.html). 
 Also, DoctrineBundle 
 [added that configuration option](https://github.com/doctrine/DoctrineBundle/pull/204).  Let's have 
-a closer look at that repository factory.  We need to implement 
+a closer look at that repository factory.  We need to implement the
 [`RepositoryFactory`](http://www.doctrine-project.org/api/orm/2.4/class-Doctrine.ORM.Repository.RepositoryFactory.html)
-which defines only the method `getRepository`;
+interface which defines only the `getRepository` method.
 
 {% highlight php startinline %}
 // AcmeBundle/ORM/RepositoryFactory.php
@@ -68,10 +72,12 @@ class DIAwareRepositoryFactory
     
     public function getRepository(EntityManagerInterface $entityManager, $entityName)
     {
+        // Try to return a custom, DI-provided repository instance
         if (isset($this->repositoryServices[$entityName])) {
             return $this->repositoryServices[$entityName];
         }
         
+        // else, defaults to default behavior
         return $this->defaultFactory->getRepository($entityManager, $entityName);
     }
     
@@ -82,11 +88,12 @@ class DIAwareRepositoryFactory
 }   
 {% endhighlight %}
 
-Define this factory as a regular service (I'll suppose it is called `repository_factory`) and tell
-DoctrineBundle to use this one instead of the default one.  Don't forget to pass an instance of
-`DefaultRepositoryFactory` as a mandatory dependency to our custom factory so it can handle 
-not-custom calls.  Next, we define a compiler pass that calls `subscribeRepository` on our 
-`DIAwareRepositoryFactory` with any custom repository we defined as service using a tag.
+You can then define this factory as a regular service (suppose it is called `repository_factory`) 
+and tell DoctrineBundle to use this one instead of the default one.  Don't forget to feed an 
+instance of `DefaultRepositoryFactory` as a mandatory dependency to our custom factory so it can 
+handle requests for regular repositories.  Next, we define a compiler pass that calls 
+`subscribeRepository` on our `DIAwareRepositoryFactory` with any custom repository we defined as a
+service and tagged specifically for this purpose.
 
 {% highlight php startinline %}
 // AcmeBundle/DependencyInjection/Compiler/CustomRepositoryPass.php
@@ -138,6 +145,10 @@ services:
                 entity_name: 'Acme\Model\Entity\Company"'
 {% endhighlight %}
 
+The above compiler pass looks for services tagged with the `custom_repository` tag and schedule 
+a subscription to the `DIAwareRepositoryFactory`.  All those services will then be available from
+the factory.
+
 For more details about service definition, using tags and about compiler passes, read some of the
 [Symfony Book](http://symfony.com/doc/current/book/index.html) and the 
 [Symfony Cookbook](http://symfony.com/doc/current/cookbook/index.html).
@@ -145,3 +156,7 @@ For more details about service definition, using tags and about compiler passes,
 With this setup the custom repository should be accessible via 
 `$this->getDoctrine()->getRepository('Acme\Model\Entity\Company')` as stated in the controller 
 listing.
+
+We can now have object repositories using arbitrary mandatory dependencies.  This is a good start !
+It is not obvious how we'll use it to retrieve  a `Company` instance yet.  We'll address this in a 
+future post.

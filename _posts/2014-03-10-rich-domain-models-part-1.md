@@ -3,24 +3,37 @@ layout: post
 title:  Curing Domain Model Anemia - Part 1
 ---
 
-I have been trying to figure out how to cure an 
-[anemic domain model](http://www.martinfowler.com/bliki/AnemicDomainModel.html) lately. Using 
-[Symfony](http://symfony.com/) and the [Doctrine ORM](http://www.doctrine-project.org/), I tried to 
-have persistent entities to be something more than plain data structures with *getters* and 
-*setters*.  The fact is that's a tremendous task, especially when you work with an existing 
-application (also known as *legacy code*).
+This post series is about building a rich domain model using [Symfony](http://symfony.com/) and the
+[Doctrine ORM](http://www.doctrine-project.org/).  *Rich domain model* may mean different thing 
+from one project to another.  Let's define it as the opposite of and 
+[*anemic domain model*](http://www.martinfowler.com/bliki/AnemicDomainModel.html).  Martin Fowler
+uses the following words :
 
-There are some really interesting articles out there about
-[*Domain Driven Design*](http://martinfowler.com/tags/domain%20driven%20design.html).  I will not
-tell you I did DDD lately, that would be a lie.  DDD is hard to implement when the developer team, 
-the boss or the client is not used to it.  I am not used to it either, but I do want to write
-good, valuable, maintainable and filled with value code.  This post and some more later on are
-intended to provide pragmatic tips and tricks on feeding some iron in an anemic business model. 
-I will not directly implement any of the \*DD 
-([TDD](http://fr.wikipedia.org/wiki/Test_Driven_Development), 
-[BDD](http://fr.wikipedia.org/wiki/Behavior_Driven_Development), 
-[DDD](http://en.wikipedia.org/wiki/Domain-driven_design), etc.).  Consider these posts as ideas
-to improve your code base and inspirations you can adapt to you own situation.
+> There are objects, many named after the nouns in the domain space, and these objects are 
+> connected with the rich relationships and structure that true domain models have. The catch 
+> comes when you look at the behavior, and you realize that there is hardly any behavior on these 
+> objects, making them little more than bags of getters and setters.
+
+We've all seen in it.  The catch comes when you realize those objects are persistent and managed
+by Doctrine.  There is no obvious workaround and nearly no documentation of the topic.  Take
+as an example injecting services in Doctrine entities.  It is not possible, strictly speaking, but 
+solutions do exists The good news are that Symfony and Doctrine are better frameworks than what 
+their  documentations show at first glance.  As 
+[Benjamin Eberlei stated in his blog](http://whitewashing.de/2013/09/04/decoupling_from_symfony_security_and_fosuserbundle.html)
+
+> [...] a framework has to be evaluated by how much it allows you to hide it from your 
+> actual application.
+
+Even if the documentation of both [Symfony](http://symfony.com/doc/current/index.html) and 
+[Doctrine](https://doctrine-orm.readthedocs.org/en/latest/) obfuscate those features, they
+exists.  In facts, they don't.  But the boilerplate code needed to make it work is quite
+flyweight and easy to figure out once you got the idea.
+
+Before we dive any deeper in the details, I recommend to read a bit about the 
+[SOLID principles](http://en.wikipedia.org/wiki/SOLID).   William
+Durand has [a good post](http://williamdurand.fr/2013/07/30/from-stupid-to-solid-code/) on the topic
+and [Clean Code](http://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) is 
+a must-have book.
 
 I keep code samples [available on github](https://github.com/abstrus/AbstrusRichModelBundle). 
 **Don't expect that code to work out of the box yet.**  Do not *copy-waste* it like an idiot !

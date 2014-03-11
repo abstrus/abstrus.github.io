@@ -13,12 +13,13 @@ I keep code samples [available on github](https://github.com/abstrus/AbstrusRich
 
 ## Injecting Services in a Doctrine Repository
 
-Most often, entities are retrieved from repositories and repositories are retrieved from the entity
-manager.  In our case, the repository will certainly needs to be injected with dependencies.  This 
-is not a problem if you define your repositories as services and use them as regular services 
-provided by the dependency injection container (using setter injection or a decorator, as described 
-[here by Jurian Sluiman](https://juriansluiman.nl/article/142/dependency-injection-in-a-doctrine-repository)).
-On the other hand, we may want to retrieve the repository using the entity manager for backward 
+Typically, entities are retrieved from repositories and repositories are provided by the entity
+manager.  In our case, the repository needs to be injected with dependencies.  This is not a problem 
+if you define your repositories as services and use them as regular services provided by the 
+dependency injection container (using setter injection or a decorator, as described [here by Jurian 
+Sluiman](https://juriansluiman.nl/article/142/dependency-injection-in-a-doctrine-repository)).
+
+On the other hand, we may want to retrieve repositories using the entity manager for backward 
 compatibility reasons.  The solution provided above by Sluiman is not well suited for a this.  We'll
 try to address this.
 
@@ -37,9 +38,9 @@ public function showAction($companyId)
 {% endhighlight %}
 
 That `getRepository` method is provided by the entity manager.  If the `Company::__construct` method 
-takes something more than an entity manager as parameters, that call will throw an exception.  The
-issue is that we *do* need to have more than one parameter in the constructor because we can't trust
-optional dependencies injected via setters.
+does not have the same signature as 
+[the one from `EntityRepository`](http://www.doctrine-project.org/api/orm/2.4/source-class-Doctrine.ORM.EntityRepository.html#___construct), that call will throw an exception.  What if we 
+*do* need to have other parameters in the constructor ?
 
 The solution will be different whether the version of Doctrine ORM we use is older than 2.4 or not.  
 If it is, I would suggest to update.  If it is not possible, you will have to use a custom 

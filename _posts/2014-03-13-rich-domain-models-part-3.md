@@ -4,6 +4,7 @@ title:  Curing Domain Model Anemia - Part 3
 ---
 
 
+
 ## Half Repository, Half Factory
 
 We are not over yet.  Our custom repository need to return `Company` objects, not `CompanyValue` objects.

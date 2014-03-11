@@ -4,3 +4,4 @@ _site
 .kateproject.d/
 .sass-cache/
 Gemfile.lock
+*swp

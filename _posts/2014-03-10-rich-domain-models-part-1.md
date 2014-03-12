@@ -4,8 +4,12 @@ title:  Rich domain models - Part 1
 ---
 
 This post series is about building a rich domain model using [Symfony](http://symfony.com/) and the
-[Doctrine ORM](http://www.doctrine-project.org/).  *Rich domain model* may have different meanings
-from one project to another.  Let's define it as the opposite of an 
+[Doctrine ORM](http://www.doctrine-project.org/).  It's not about business analysis or UML.  It a
+collection of tools and techniques to help coders think of their framework as an tool, not as a
+bunch of bounds and limitations.
+
+*Rich domain model* may have different meanings from one project to another.  Let's define it as 
+the opposite of an 
 [*anemic domain model*](http://www.martinfowler.com/bliki/AnemicDomainModel.html).  In 
 [this article](http://www.martinfowler.com/bliki/AnemicDomainModel.html) (by the way, I strongly
 recommend to read it), Martin Fowler uses the following words :

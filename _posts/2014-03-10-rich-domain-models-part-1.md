@@ -4,29 +4,35 @@ title:  Curing Domain Model Anemia - Part 1
 ---
 
 This post series is about building a rich domain model using [Symfony](http://symfony.com/) and the
-[Doctrine ORM](http://www.doctrine-project.org/).  *Rich domain model* may mean different thing 
-from one project to another.  Let's define it as the opposite of and 
-[*anemic domain model*](http://www.martinfowler.com/bliki/AnemicDomainModel.html).  Martin Fowler
-uses the following words :
+[Doctrine ORM](http://www.doctrine-project.org/).  *Rich domain model* may have different meanings
+from one project to another.  Let's define it as the opposite of an 
+[*anemic domain model*](http://www.martinfowler.com/bliki/AnemicDomainModel.html).  In 
+[this article](http://www.martinfowler.com/bliki/AnemicDomainModel.html) (by the way, I strongly
+recommend to read it), Martin Fowler uses the following words :
 
 > There are objects, many named after the nouns in the domain space, and these objects are 
 > connected with the rich relationships and structure that true domain models have. The catch 
 > comes when you look at the behavior, and you realize that there is hardly any behavior on these 
 > objects, making them little more than bags of getters and setters.
 
-We've all seen in it.  The catch comes when you realize those objects are persistent and managed
-by Doctrine.  There is no obvious workaround and nearly no documentation of the topic.  Take
-as an example injecting services in Doctrine entities.  It is not possible, strictly speaking, but 
-solutions do exists The good news are that Symfony and Doctrine are better frameworks than what 
-their  documentations show at first glance.  As 
-[Benjamin Eberlei stated in his blog](http://whitewashing.de/2013/09/04/decoupling_from_symfony_security_and_fosuserbundle.html)
+We've all seen in it.  A domain model is a tool and may not be the best in every situation.
+Let's suppose that we need one in a given situation, or at least we want to be able to make one
+work, *just in case*.  Using the Symfony framework, that may imply that you want to implement
+complex behaviors within your entities.
+
+But how can we inject dependencies in doctrine entities ?
+
+There is no obvious workaround and nearly no documentation of the topic.  It is not possible, 
+strictly speaking, but solutions do exists. The good news are that Symfony and Doctrine are better 
+frameworks than what their documentations show at first glance.  As 
+[Benjamin Eberlei stated in his blog:](http://whitewashing.de/2013/09/04/decoupling_from_symfony_security_and_fosuserbundle.html)
 
 > [...] a framework has to be evaluated by how much it allows you to hide it from your 
 > actual application.
 
 Even if the documentation of both [Symfony](http://symfony.com/doc/current/index.html) and 
 [Doctrine](https://doctrine-orm.readthedocs.org/en/latest/) obfuscate those features, they
-exists.  In facts, they don't.  But the boilerplate code needed to make it work is quite
+exist.  In facts, they don't.  But the boilerplate code needed to make it work is quite
 flyweight and easy to figure out once you got the idea.
 
 Before we dive any deeper in the details, I recommend to read a bit about the 
@@ -50,6 +56,8 @@ namely
 - What else (but create, read, etc.) would you want that application do ?
 - What's wrong with CRUD anyway ?
 - We're not starting, the application is already a CRUD one.
+- CRUD architecture is conceptually close to 
+[transaction scripts](http://martinfowler.com/eaaCatalog/transactionScript.html) which sounds familiar to developers having a *data* background
 - etc.
 
 The fact is that CRUD may not be enough.  Plus, what makes a CRUD architecture so fast to implement

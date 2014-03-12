@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Curing Domain Model Anemia - Part 3
+title:  Rich domain models - Part 3
 ---
 
 

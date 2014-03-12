@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  Curing Domain Model Anemia - Part 2
+title:  Rich domain models - Part 2
 ---
 
 In the quest for a rich domain model, we are struggling to have entities injected with services.
 In the previous post, we defined what we thought would be nice to have and ran
-into some troubles with the persistence layer.  This time, we'll address one of those issues :
+into some troubles with the persistence layer.  This time, we'll address a specific issue :
 injecting dependencies into our entity repositories.
 
 I keep code samples [available on github](https://github.com/abstrus/AbstrusRichModelBundle). 
@@ -13,7 +13,7 @@ I keep code samples [available on github](https://github.com/abstrus/AbstrusRich
 
 ## Injecting Services in a Doctrine Repository
 
-Typically, entities are retrieved from repositories and repositories are provided by the entity
+Typically, entities are retrieved from a repository and repositories are provided by the entity
 manager.  In our case, the repository needs to be injected with dependencies.  This is not a problem 
 if you define your repositories as services and use them as regular services provided by the 
 dependency injection container (using setter injection or a decorator, as described [here by Jurian 
@@ -89,7 +89,7 @@ class DIAwareRepositoryFactory
 }   
 {% endhighlight %}
 
-You can then define this factory as a regular service (suppose it is called `repository_factory`) 
+You can then define this factory as a regular service (let's suppose it is called `repository_factory`) 
 and tell DoctrineBundle to use this one instead of the default one.  Don't forget to feed an 
 instance of `DefaultRepositoryFactory` as a mandatory dependency to our custom factory so it can 
 handle requests for regular repositories.  Next, we define a compiler pass that calls 
@@ -129,7 +129,7 @@ class CustomRepositoryPass implements CompilerPassInterface
 }
 {% endhighlight %}
 
-And define your custom repositories injected with services like this:
+and define your custom repositories injected with services like this:
 
 {% highlight yaml startinline %}
 # AcmeBundle/Resources/config/services.yml

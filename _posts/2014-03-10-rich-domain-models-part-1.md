@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Curing Domain Model Anemia - Part 1
+title:  Rich domain models - Part 1
 ---
 
 This post series is about building a rich domain model using [Symfony](http://symfony.com/) and the
@@ -150,7 +150,8 @@ tell me it's naughty to expose public properties in this way.  Public properties
 equivalent to plain getters and setters.  If you are not happy with it, fill it with getters and 
 setters, it'll work. More so, that `CompanyValue` class is intended to be what other languages may 
 call a protected, nested  or inner class.  So yes, this is a pure `struct`, not an hypocrite one. 
-Some may call it a  *database abstraction layer*, which is quite true.
+Some may call it a  *database abstraction layer*, which is quite true.  We may later find a way
+to get completely rid of that data structure.
 
 Let's focus on the `Company` class.  This is our domain object.  It's `$value` property could be any
 kind of container (plain array, parameter bag, and so on).  The `Company` class does not know about

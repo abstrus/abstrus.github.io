@@ -5,7 +5,7 @@ layout: default
 <article class="post">
   
   <div class="row">
-    <div class="small-12 columns">
+    <div class="small-10 columns">
       {% if page.date %}
       <time pubdate="pubdate" datetime="{{ page.date | date_to_xmlschema }}">
         <meta itemprop="datePublished" content="{{ page.date | date_to_xmlschema }}"/>
@@ -15,42 +15,61 @@ layout: default
       <h1 class="post-title">
         {{ page.title }}
       </h1>
-    </div> 
+    </div>
+    <div class="small-2 columns post-head-links">
+      {% if page.translation != nil %}
+      <a class="translation-link" href="{{ site.url }}/{{ page.translation }}{{ page.url }}">
+        Lire en français
+      </a>
+      {% elsif page.categories contains 'fr' %}
+      <a class="translation-link" href="{{ site.url }}{{ page.url | remove: '/fr' }}">
+        Read in English
+      </a>
+      {% endif %}
+    </div>
   </div>
-  
+   
   <div class="post-body">
     {{ content }}
   </div>
   
-  <div class="row">
-    <div class="small-12 pagination-centered columns">
-      <ul class="pagination">
-        {% if page.previous.url %}
-          {% assign previous_available = available                                %}
-          {% assign previous_url       = page.previous.url                        %}
-          {% assign previous_text      = page.previous.title | prepend: '&laquo;&laquo;  ' %}
-        {% else %}
-          {% assign previous_available = unavailable                              %}
-          {% assign previous_url       = ''                                       %}
-          {% assign previous_text      = ''                                       %}
+  <div class="footer-links">
+    <hr>
+    {% assign current_is_fr  = 0 %}
+    {% assign related_header = 'Related Posts' %}
+    {% for cat in page.categories %}
+      {% if cat | first ==  'fr' %}
+        {% assign current_is_fr  = 1 %}
+        {% assign related_header = 'Articles liés' %}
+      {% endif %}
+    {% endfor%}
+    
+    <h2>{{ related_header }}</h2>
+    <ul class="posts no-bullet">
+
+      {% for related_post in site.related_posts limit:3 %}
+      
+        {% assign related_is_fr  = 0 %}
+        {% for cat in related_post.categories %}
+          {% if cat | first ==  'fr' %}
+            {% assign related_is_fr  = 1 %}
+          {% endif %}
+        {% endfor%}
+      
+        {% if current_is_fr == related_is_fr %}
+          <li>
+            <span class="post-list">
+              {{ related_post.date | date: "%m.%d.%y" }}
+            </span>
+            &raquo; 
+            <span class="post-list">
+              <a href="{{ related_post.url }}">{{ related_post.title }}</a>
+            </span>
+          </li>
         {% endif %}
-        <li class="arrow {{ previous_available }}">
-          <a href="{{ previous_url }}">{{ previous_text }}</a>
-        </li>
-        {% if page.next.url %}
-          {% assign next_available = available                                    %}
-          {% assign next_url       = page.next.url                                %}
-          {% assign next_text      = page.next.title | append: '  &raquo;&raquo;'   %}
-        {% else %}
-          {% assign next_available = unavailable                                  %}
-          {% assign next_url       = ''                                           %}
-          {% assign next_text      = ''                                           %}
-        {% endif %}
-        <li class="arrow {{ next_available }}">
-          <a href="{{ next_url }}">{{ next_text }}</a>
-        </li>
-      </ul>
-    </div>
+      
+      {% endfor %}
+    </ul>
   </div>
   
 </article>

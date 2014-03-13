@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Rich domain models - Part 1
+title:  Dependency injection with Doctrine - Part 1
 ---
 
 This post series is about building a rich domain model using [Symfony](http://symfony.com/) and the

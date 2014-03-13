@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Rich domain models - Part 2
+title:  Dependency injection with Doctrine - Part 2
 ---
 
 In the quest for a rich domain model, we are struggling to have entities injected with services.

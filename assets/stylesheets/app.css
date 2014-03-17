@@ -3847,19 +3847,23 @@ p code {
   font-weight: normal;
   color: #585858;
 }
+/* line 19, ../sass/_custom.scss */
+p a {
+  color: #000080;
+}
 
-/* line 21, ../sass/_custom.scss */
+/* line 24, ../sass/_custom.scss */
 .post-head-links {
   margin: 2em 0em 2em 0em;
 }
-/* line 23, ../sass/_custom.scss */
+/* line 26, ../sass/_custom.scss */
 .post-head-links .translation-link {
   font-family: "Jura", "sans-serif";
   font-size: small;
   text-align: right;
 }
 
-/* line 30, ../sass/_custom.scss */
+/* line 33, ../sass/_custom.scss */
 .highlight {
   background-color: #000000;
   padding: 0.5em 0.5em 0.1em 0.5em;
@@ -3867,51 +3871,51 @@ p code {
   overflow-x: auto;
   font-size: small;
 }
-/* line 37, ../sass/_custom.scss */
+/* line 40, ../sass/_custom.scss */
 .highlight pre {
   padding: 0em 0em 0em 0em;
   margin: 0em 0em 0.5em 0em;
   background-color: #000;
 }
 
-/* line 46, ../sass/_custom.scss */
+/* line 49, ../sass/_custom.scss */
 .post-list {
   font-family: "Jura", "sans-serif";
 }
 
-/* line 50, ../sass/_custom.scss */
+/* line 53, ../sass/_custom.scss */
 .anchor-link {
   color: #DDD;
   font-size: 80%;
   padding: 0em 0em 0em 0.5em;
 }
 
-/* line 56, ../sass/_custom.scss */
+/* line 59, ../sass/_custom.scss */
 time {
   font-family: "Jura", "sans-serif";
   color: #BBB;
 }
 
-/* line 62, ../sass/_custom.scss */
+/* line 65, ../sass/_custom.scss */
 #copy-notice p {
   color: #999;
   text-align: center;
   font-family: "Jura", "sans-serif";
 }
 
-/* line 69, ../sass/_custom.scss */
+/* line 72, ../sass/_custom.scss */
 nav {
   margin: 1em 1em 1em 1em;
 }
-/* line 72, ../sass/_custom.scss */
+/* line 75, ../sass/_custom.scss */
 nav #site-name {
   margin: 0em 0em 0em 0em;
 }
-/* line 74, ../sass/_custom.scss */
+/* line 77, ../sass/_custom.scss */
 nav #site-name a {
   color: #AAA;
 }
-/* line 79, ../sass/_custom.scss */
+/* line 82, ../sass/_custom.scss */
 nav #linked-pages ul {
   display: block;
   float: right;
@@ -3919,33 +3923,33 @@ nav #linked-pages ul {
   text-align: right;
   padding: 0em 0em 1em 0em;
 }
-/* line 86, ../sass/_custom.scss */
+/* line 89, ../sass/_custom.scss */
 nav #linked-pages ul li {
   display: inline;
   margin: 0.5em;
 }
-/* line 89, ../sass/_custom.scss */
+/* line 92, ../sass/_custom.scss */
 nav #linked-pages ul li a {
   font-family: "Jura", "sans-serif";
   color: #bbb;
   text-shadow: #333 1px 0 2px;
 }
-/* line 93, ../sass/_custom.scss */
+/* line 96, ../sass/_custom.scss */
 nav #linked-pages ul li a img {
   height: 1.5em;
   width: 1.5em;
 }
 
-/* line 103, ../sass/_custom.scss */
+/* line 106, ../sass/_custom.scss */
 body {
   background-image: url(../images/dark_mosaic.png);
   min-height: 100%;
 }
-/* line 107, ../sass/_custom.scss */
+/* line 110, ../sass/_custom.scss */
 body #page-content {
   padding: 0em 0em 0em 0em;
 }
-/* line 110, ../sass/_custom.scss */
+/* line 113, ../sass/_custom.scss */
 body #page-content #wrapper {
   position: relative;
   padding: 2em 1em 1em 1em;

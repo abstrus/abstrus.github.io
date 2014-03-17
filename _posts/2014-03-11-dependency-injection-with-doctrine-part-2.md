@@ -8,7 +8,7 @@ In the previous post, we defined what we thought would be nice to have and ran
 into some troubles with the persistence layer.  This time, we'll address a specific issue :
 injecting dependencies into our entity repositories.
 
-I keep code samples [available on github](https://github.com/abstrus/AbstrusRichModelBundle). 
+I keep code samples [available on github][github-richmodel]{:target="_blank"}. 
 **Don't expect that code to work out of the box yet.**  Do not *copy-waste* it like an idiot !
 
 ## Injecting Services in a Doctrine Repository
@@ -16,8 +16,8 @@ I keep code samples [available on github](https://github.com/abstrus/AbstrusRich
 Typically, entities are retrieved from a repository and repositories are provided by the entity
 manager.  In our case, the repository needs to be injected with dependencies.  This is not a problem 
 if you define your repositories as services and use them as regular services provided by the 
-dependency injection container (using setter injection or a decorator, as described [here by Jurian 
-Sluiman](https://juriansluiman.nl/article/142/dependency-injection-in-a-doctrine-repository)).
+dependency injection container (using setter injection or a decorator, as described 
+[here by Jurian  Sluiman][sluiman-didoctrine]{:target="_blank"}).
 
 On the other hand, we may want to retrieve repositories using the entity manager for backward 
 compatibility reasons.  The solution provided above by Sluiman is not well suited for a this.  We'll
@@ -38,20 +38,19 @@ public function showAction($companyId)
 {% endhighlight %}
 
 That `getRepository` method is provided by the entity manager.  If the `Company::__construct` method 
-does not have the same signature as 
-[the one from `EntityRepository`](http://www.doctrine-project.org/api/orm/2.4/source-class-Doctrine.ORM.EntityRepository.html#___construct), that call will throw an exception.  What if we 
-*do* need to have other parameters in the constructor ?
+does not have the same signature as it's [parent class][api-entityrepository]{:target="_blank"}, 
+that call will throw an exception.  What if we *do* need to have other parameters in the constructor ?
 
 The solution will be different whether the version of Doctrine ORM we use is older than 2.4 or not.  
 If it is, I would suggest to update.  If it is not possible, you will have to use a custom 
 `EntityManager` and reimplement the `getRepository` method so it uses some custom factory to provide 
 repositories.  Else, Doctrine added that feature for us as stated in the 
-[2.4 release blog post](http://www.doctrine-project.org/2013/09/11/doctrine-2-4-released.html). 
-Also, DoctrineBundle 
-[added that configuration option](https://github.com/doctrine/DoctrineBundle/pull/204).  Let's have 
-a closer look at that repository factory.  We need to implement the
-[`RepositoryFactory`](http://www.doctrine-project.org/api/orm/2.4/class-Doctrine.ORM.Repository.RepositoryFactory.html)
-interface which defines only the `getRepository` method.
+[2.4 release blog post][doctrine-release2.4]{:target="_blank"}. 
+Also, DoctrineBundle added that 
+[configuration option][github-doctrinebundle-repositoryfactory]{:target="_blank"}.  
+Let's have  a closer look at that repository factory.  We need to implement the 
+[`RepositoryFactory`][api-repositoryfactory]{:target="_blank"} interface which defines only the 
+`getRepository` method.
 
 {% highlight php startinline %}
 // AcmeBundle/ORM/RepositoryFactory.php
@@ -151,8 +150,7 @@ a subscription to the `DIAwareRepositoryFactory`.  All those services will then 
 the factory.
 
 For more details about service definition, using tags and about compiler passes, read some of the
-[Symfony Book](http://symfony.com/doc/current/book/index.html) and the 
-[Symfony Cookbook](http://symfony.com/doc/current/cookbook/index.html).
+[Symfony Book][symfonybook]{:target="_blank"} and the [Symfony Cookbook][symfonycookbook]{:target="_blank"}.
 
 With this setup the custom repository should be accessible via 
 `$this->getDoctrine()->getRepository('Acme\Model\Entity\Company')` as stated in the controller 
@@ -161,3 +159,17 @@ listing.
 We can now have object repositories using arbitrary mandatory dependencies.  This is a good start !
 It is not obvious how we'll use it to retrieve  a `Company` instance yet.  We'll address this in a 
 future post.
+
+[api-entityrepository]:   http://www.doctrine-project.org/api/orm/2.4/source-class-Doctrine.ORM.EntityRepository.html#___construct  "EntityRepository API Documentation"
+[api-repositoryfactory]:  http://www.doctrine-project.org/api/orm/2.4/class-Doctrine.ORM.Repository.RepositoryFactory.html          "RepositoryFactory API Documentation"
+
+[symfonybook]:            http://symfony.com/doc/current/book/index.html                                                            "Symfony Online Book"
+[symfonycookbook]:        http://symfony.com/doc/current/cookbook/index.html                                                        "Symfony Online Cookbook"
+
+[github-richmodel]:       https://github.com/abstrus/AbstrusRichModelBundle                                                         "AbstrusRichModelBundle on Github"
+
+[github-doctrinebundle-repositoryfactory]: https://github.com/doctrine/DoctrineBundle/pull/204 "RepositoryFactory configuration - Github Pull Request"
+
+[doctrine-release2.4]: http://www.doctrine-project.org/2013/09/11/doctrine-2-4-released.html "Doctrine 2.4 Released - Doctrine blog"
+
+[sluiman-didoctrine]: https://juriansluiman.nl/article/142/dependency-injection-in-a-doctrine-repository "Jurian Sluiman about Dependency Injection with Doctrine repositories"

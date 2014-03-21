@@ -1,16 +1,17 @@
 ---
 layout: post
 title:  Dependency injection with Doctrine - Part 1
+translation: fr
 ---
 
-This post series is about building a rich domain model using 
+This thread is about building a rich domain model using 
 [Symfony][symfony-home]{:target="_blank"} and the [Doctrine ORM][doctrine-home]{:target="_blank"}.  
 It's not about business analysis or UML.  It a collection of tools and techniques to help coders 
-think of their framework as an tool, not as a bunch of bounds and limitations.
+think of their framework as a tool with less limitations.
 
 *Rich domain model* may have different meanings from one project to another.  Let's define it as 
 the opposite of an [*anemic domain model*][fowler-anemic]{:target="_blank"}.  In 
-[this article](fowler-anemic){:target="_blank"} (by the way, I strongly recommend to read it), 
+[this article](fowler-anemic){:target="_blank"} which, by the way, I strongly recommend, 
 Martin Fowler uses the following words :
 
 > There are objects, many named after the nouns in the domain space, and these objects are 
@@ -18,12 +19,12 @@ Martin Fowler uses the following words :
 > comes when you look at the behavior, and you realize that there is hardly any behavior on these 
 > objects, making them little more than bags of getters and setters.
 
-We've all seen in it.  A domain model is a tool and may not be the best in every situation.
+We've all seen it.  A domain model may not be the tool you need.
 Let's suppose that we need one in a given situation, or at least we want to be able to make one
-work, *just in case*.  Using the Symfony framework, that may imply that you want to implement
-complex behaviors within your entities.
+work, *just in case*.
 
-But how can we inject dependencies in doctrine entities ?
+Somehow we'll need access to some service *within* an entity. But how can we inject dependencies in 
+doctrine entities ?
 
 There is no obvious workaround and nearly no documentation of the topic.  It is not possible, 
 strictly speaking, but solutions do exists. The good news are that Symfony and Doctrine are better 
@@ -97,7 +98,7 @@ class Company {
 
 We have a plain data structure with all usual methods that ease the use of Symfony forms, doctrine
 components, and so on. This is not really object oriented programming because you'll end up having 
-*do-er* classes handling that *know-er* class.  C programmers could call this an hypocrite `struct`. 
+*do-er* classes handling that *know-er* class.  C programmers could call this an hypocritical `struct`. 
 Let's start over and make two classes.
 
 {% highlight php startinline %}

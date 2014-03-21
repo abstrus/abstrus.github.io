@@ -16,16 +16,31 @@ title: Welcome!
     </p>
     <h2>Posts</h2>
     <ul class="no-bullet">
-      {% for post in site.posts %}
+      {% for current_post in site.posts %}
       <li>     
-        {% if post.categories contains 'fr' %}
-        {% else %}
+        {% assign post_is_fr  = 'false' %}
+        {% for cat in current_post.categories %}
+          {% if cat ==  'fr' %}
+            {% assign post_is_fr  = 'true' %}
+          {% endif %}
+        {% endfor%}
+        
+        {% if post_is_fr == 'false' %}
         <span class="post-list">
-          {{ post.date | date: "%m.%d.%y" }}
+          {{ current_post.date | date: "%m.%d.%y" }}
         </span>
         &raquo; 
         <span class="post-list">
-          <a href="{{ post.url }}">{{ post.title }}</a>
+          <a href="{{ current_post.url }}">{{ current_post.title }}</a>
+        </span>
+        
+          {% if current_post.translation != nil %}
+        <span class="post-list post-list-translation">
+          ~
+          <a class="post-list translation-link" href="{{ site.url }}{{ current_post.translation }}{{ current_post.url }}">
+            Lire en français
+          </a>
+          {% endif %}
         </span>
         {% endif %}
       </li>

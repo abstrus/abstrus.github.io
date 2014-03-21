@@ -1,31 +1,39 @@
 ---
 layout: post
-title:  Dependency injection with Doctrine - Part 2
-translation: fr
+title:  Injection de dépendance avec Doctrine - Deuxième partie
+categories: fr
 ---
+
+*Je ne traduirai plus les exemples de code jugeant que ceci est inutile étant donné que les 
+mots-clef doivent rester en anglais de toute façon.*
+
+Dans notre quête de modélisation riche d'un domaine d'affaire, nous tentons d'injecter des
+dépendances à nos entités Doctrine.  Dans l'article précédent, nous avons déterminé ce qu'il
+nous faut et avons eu certaines difficultés avec la couche d'accès aux données persistantes.
+Nous avons vu qu'en empruntant une idée du C++, nous allions pouvoir contourner ce détail. Par
+contre, nous aurons besoin d'injecter des services dans nos dépôts d'entités.  C'est ce que nous
+détaillerons ici.
 
 In the quest for a rich domain model, we are struggling to have entities injected with services.
 In the previous post, we defined what we thought would be nice to have and ran
 into some troubles with the persistence layer.  This time, we'll address a specific issue :
 injecting dependencies into our entity repositories.
 
-I keep code samples [available on github][github-richmodel]{:target="_blank"}. 
-**Don't expect that code to work out of the box yet.**  Do not *copy-waste* it like an idiot !
+Il y a des exemples de codes plus charnus [sur Github][github-richmodel]{:target="_blank"}. 
+**Ne supposez pas que le code fonctionnera directement.**  Ce ne sont que des exemples et des 
+brouillons.
 
-## Injecting Services in a Doctrine Repository
+## Injection de services dans un dépôt Doctrine
 
-Typically, entities are retrieved from a repository and repositories are provided by the entity
-manager.  In our case, the repository needs to be injected with dependencies.  This is not a problem 
-if you define your repositories as services and use them as regular services provided by the 
-dependency injection container (using setter injection or a decorator, as described 
-[here by Jurian  Sluiman][sluiman-didoctrine]{:target="_blank"}).
+Normalement, les entités sont récupérée des dépôts et les dépôts sont fournis par le gestionnaire
+d'entités.  Il n'y a pas de problème à déclarer un dépôt en tant que service, y injecter toutes
+sortes de dépendances et l'utiliser via le conteneur Symfony en utilisant l'injection par méthode
+ou un décorateur, tel que décrit par Jurian Sluiman dans 
+[son blog][sluiman-didoctrine]{:target="_blank"}. D'un autre côté, si partout dans le reste de 
+l'application nous utilisons le gestionnaire d'entités pour récupérer les dépôts, la solution de 
+Sluiman ne sera pas suffisante.
 
-On the other hand, we may want to retrieve repositories using the entity manager for backward 
-compatibility reasons.  The solution provided above by Sluiman is not well suited for a this.  We'll
-try to address this.
-
-Let's say we want to fetch our newly rich domain object in the usual fashion shown in most
-documentations.
+Supposons que nous voulons récupérer un objet métier de manière usuelle comme suit.
 
 {% highlight php startinline %}
 // AcmeBundle/Controller/SomeController.php
@@ -38,20 +46,18 @@ public function showAction($companyId)
 }
 {% endhighlight %}
 
-That `getRepository` method is provided by the entity manager.  If the `Company::__construct` method 
-does not have the same signature as it's [parent class][api-entityrepository]{:target="_blank"}, 
-that call will throw an exception.  What if we *do* need to have other parameters in the constructor ?
+Si la fonction `Company::__construct` n'a pas exactement la même signature que celle de ça 
+[classe mère][api-entityrepository]{:target="_blank"}, ce code plantera.
 
-The solution will be different whether the version of Doctrine ORM we use is older than 2.4 or not.  
-If it is, I would suggest to update.  If it is not possible, you will have to use a custom 
-`EntityManager` and reimplement the `getRepository` method so it uses some custom factory to provide 
-repositories.  Else, Doctrine added that feature for us as stated in the 
-[2.4 release blog post][doctrine-release2.4]{:target="_blank"}. 
-Also, DoctrineBundle added that 
-[configuration option][github-doctrinebundle-repositoryfactory]{:target="_blank"}.  
-Let's have  a closer look at that repository factory.  We need to implement the 
-[`RepositoryFactory`][api-repositoryfactory]{:target="_blank"} interface which defines only the 
-`getRepository` method.
+La solution dépend en partie de la version de Doctrine que vous utilisez.  Si vous utilisez une
+version antérieure à 2.4, je recommande de mettre à jour.  Si ce n'est pas possible, vous devrez
+faire une implémentation maison de la classe `EntityManager` et redéfinir la méthode `getRepository`
+pour qu'elle utilise une usine à dépôt sur mesure.  Sinon, on a ajouté cette fonctionnalité à
+Doctrine tel que mentionné dans l'[annonce de la sortie 2.4][doctrine-release2.4]{:target="_blank"}. 
+De plus, le bundle DoctrineBundle comporte une 
+[option de configuration][github-doctrinebundle-repositoryfactory]{:target="_blank"}  à cet effet.
+Regardons de plus près cette usine à dépôt. Nous aurons besoin d'implémenter l'interface 
+[`RepositoryFactory`][api-repositoryfactory]{:target="_blank"}.
 
 {% highlight php startinline %}
 // AcmeBundle/ORM/RepositoryFactory.php
@@ -73,12 +79,12 @@ class DIAwareRepositoryFactory
     
     public function getRepository(EntityManagerInterface $entityManager, $entityName)
     {
-        // Try to return a custom, DI-provided repository instance
+        // Essaie de fournir un dépôt maison
         if (isset($this->repositoryServices[$entityName])) {
             return $this->repositoryServices[$entityName];
         }
         
-        // else, defaults to default behavior
+        // sinon, adopte le comportement par défaut.
         return $this->defaultFactory->getRepository($entityManager, $entityName);
     }
     
@@ -89,12 +95,13 @@ class DIAwareRepositoryFactory
 }   
 {% endhighlight %}
 
-You can then define this factory as a regular service (let's suppose it is called `repository_factory`) 
-and tell DoctrineBundle to use this one instead of the default one.  Don't forget to feed an 
-instance of `DefaultRepositoryFactory` as a mandatory dependency to our custom factory so it can 
-handle requests for regular repositories.  Next, we define a compiler pass that calls 
-`subscribeRepository` on our `DIAwareRepositoryFactory` with any custom repository we defined as a
-service and tagged specifically for this purpose.
+Vous pouvez ensuite déclarer cette usine comme un service normal (supposons qu'il s'appelle 
+`repository_factory`) et indiquer à la configuration de DoctrineBundle d'utiliser celui-ci à
+la place.  Il ne faut pas oublier de lui passer une instance de `DefaultRepositoryFactory`
+pour assurer une rétro-compatibilité. 
+
+Nous devons ensuite coder une passe de compilation (*compiler pass*) pour indiquer à notre
+`DIAwareRepositoryFactory` quels sont les dépôt sur mesure que nous voulons qui prenne en charge.
 
 {% highlight php startinline %}
 // AcmeBundle/DependencyInjection/Compiler/CustomRepositoryPass.php
@@ -129,7 +136,7 @@ class CustomRepositoryPass implements CompilerPassInterface
 }
 {% endhighlight %}
 
-and define your custom repositories injected with services like this:
+Finalement, nous définissons nos dépôts comme des services à envoyer à notre usine comme ceci :
 
 {% highlight yaml startinline %}
 # AcmeBundle/Resources/config/services.yml
@@ -146,20 +153,15 @@ services:
                 entity_name: 'Acme\Model\Entity\Company"'
 {% endhighlight %}
 
-The above compiler pass looks for services tagged with the `custom_repository` tag and schedule 
-a subscription to the `DIAwareRepositoryFactory`.  All those services will then be available from
-the factory.
+Pour plus de détails sur la définition de services, l'utilisation d'étiquettes ou sur les passes
+de compilation, lisez les livres [Symfony Book][symfonybook]{:target="_blank"} et [Symfony Cookbook][symfonycookbook]{:target="_blank"}.
 
-For more details about service definition, using tags and about compiler passes, read some of the
-[Symfony Book][symfonybook]{:target="_blank"} and the [Symfony Cookbook][symfonycookbook]{:target="_blank"}.
+Avec toute cette mise en place, notre dépôt d'entité personnalisé devrait être accessible via 
+`$this->getDoctrine()->getRepository('Acme\Model\Entity\Company')` tel que montré dans l'exemple
+de contrôleur.  Nous pouvons maintenant utiliser des dépôts munis de dépendances arbitraires. C'est
+un bon départ !  La manière de récupérer des instance de `Company` n'est pas encore évidente.  Nous
+détaillerons ce point dans un prochain article.
 
-With this setup the custom repository should be accessible via 
-`$this->getDoctrine()->getRepository('Acme\Model\Entity\Company')` as stated in the controller 
-listing.
-
-We can now have object repositories using arbitrary mandatory dependencies.  This is a good start !
-It is not obvious how we'll use it to retrieve  a `Company` instance yet.  We'll address this in a 
-future post.
 
 [api-entityrepository]:   http://www.doctrine-project.org/api/orm/2.4/source-class-Doctrine.ORM.EntityRepository.html#___construct  "EntityRepository API Documentation"
 [api-repositoryfactory]:  http://www.doctrine-project.org/api/orm/2.4/class-Doctrine.ORM.Repository.RepositoryFactory.html          "RepositoryFactory API Documentation"

@@ -1,9 +1,10 @@
 ---
 layout: post
 title:  Dependency injection with Doctrine - Part 3
+translation: fr
 ---
 
-On [part 2][abstruscodes-], we managed to have dependencies injected in Doctrine 
+On [part 2][abstruscodes-previous], we managed to have dependencies injected in Doctrine 
 repositories.  This time, we would like to have dependencies injected in Doctrine entities.
 There are many ways to achieve this. 
 

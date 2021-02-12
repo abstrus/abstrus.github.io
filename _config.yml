@@ -1,11 +1,11 @@
 title:        abstrus codes
-url:          http://abstrus.github.io
+url:          http://cblegare.github.io
 author:       Charles Bouchard-Légaré
 
 meta:
     cblegare:
         name:     Charles Bouchard-Légaré
-        github:   abstrus
+        github:   cblegare
 
 source:       .
 destination:  ./_site
